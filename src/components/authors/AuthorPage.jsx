@@ -18,7 +18,7 @@ const AuthorPage = () => {
 
   if (error) return <h3>Error</h3>;
 
-  console.log(data);
+  data;
 
   const { author } = data;
 

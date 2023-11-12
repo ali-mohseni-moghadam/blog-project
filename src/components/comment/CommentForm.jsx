@@ -1,10 +1,40 @@
 import React, { useState } from "react";
 import { Button, Grid, TextField, Typography } from "@mui/material";
+import { useMutation } from "@apollo/client";
+import { SEND_COMMENT } from "../graphql/mutations";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CommentForm = ({ slug }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [text, setText] = useState("");
+  const [pressed, setPressed] = useState(false);
+
+  const [sendComment, { loading, data, error }] = useMutation(SEND_COMMENT, {
+    variables: { name, email, text, slug },
+  });
+
+
+  const sendHandler = () => {
+    if (name && email && text) {
+      sendComment();
+      setPressed(true);
+    } else {
+      toast.warn("تمام فیلد ها را پر کنید", {
+        position: "top-center",
+      });
+    }
+  };
+
+  if (data && pressed) {
+    toast.success("کامنت ارسال شد و منتظر تایید میباشد", {
+      position: "top-center",
+    });
+    setPressed(false);
+  }
+
   return (
     <Grid
       container
@@ -49,9 +79,18 @@ const CommentForm = ({ slug }) => {
           />
         </Grid>
         <Grid item xs={12} mt={2} mr={2}>
-          <Button variant="contained">ارسال</Button>
+          {loading ? (
+            <Button variant="contained" disabled>
+              در حال ارسال
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={sendHandler}>
+              ارسال
+            </Button>
+          )}
         </Grid>
       </Grid>
+      <ToastContainer />
     </Grid>
   );
 };

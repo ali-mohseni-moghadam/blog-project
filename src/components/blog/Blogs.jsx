@@ -12,7 +12,6 @@ const Blogs = () => {
 
   if (error) return <h3>Error</h3>;
 
-  console.log(loading, data, error);
 
   return (
     <Grid container spacing={2}>

@@ -12,7 +12,6 @@ const Authors = () => {
 
   if (error) return <h3>Error</h3>;
 
-  console.log(data);
 
   const { authors } = data;
   return (
